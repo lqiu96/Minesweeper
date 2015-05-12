@@ -7,12 +7,12 @@ public class MinesweeperRunner {
         Toolkit tk = f.getToolkit();
         Dimension d = tk.getScreenSize();
         f.setBounds(100, 100, d.width - 200, d.height - 200);
-        f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         Container pane = f.getContentPane();
         f.setLayout(new BorderLayout());
 
-        MinesweeperControlPanel mscp = new MinesweeperControlPanel();
-        pane.add(mscp);
+        MinesweeperControlPanel controlPanel = new MinesweeperControlPanel();
+        pane.add(controlPanel);
         f.setVisible(true);
     }
 }
