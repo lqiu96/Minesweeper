@@ -15,6 +15,29 @@ public class MinesweeperControlPanel extends JPanel {
         setLayout(new BorderLayout());
         minesweeperPanel = new MinesweeperPanel(this);
 
+        initializeMenu();
+
+        seconds = 0;
+        time = new JLabel("Time: " + seconds);
+        time.setPreferredSize(new Dimension(200, 30));
+        minesLeft = new JLabel("Mines Left: " + mines);
+        minesLeft.setPreferredSize(new Dimension(200, 30));
+        JButton restart = new JButton("Restart");
+        restart.setMnemonic(KeyEvent.VK_R);
+        restart.addActionListener(new HandleStart());
+        timer = new javax.swing.Timer(1000, new TimerHandler());
+        JPanel jp = new JPanel();
+        jp.setLayout(new GridLayout(1, 3));
+        jp.setBackground(Color.GREEN);
+        jp.setPreferredSize(new Dimension(700, 30));
+        jp.add(minesLeft);
+        jp.add(restart);
+        jp.add(time);
+        add(jp, BorderLayout.SOUTH);
+        add(minesweeperPanel, BorderLayout.CENTER);
+    }
+
+    private void initializeMenu() {
         JMenuBar menuBar = new JMenuBar();
         add(menuBar, BorderLayout.NORTH);
         JMenu game = new JMenu("Game");
@@ -50,26 +73,6 @@ public class MinesweeperControlPanel extends JPanel {
 
         menuBar.add(game);
         menuBar.add(options);
-
-
-        seconds = 0;
-        time = new JLabel("Time: " + seconds);
-        time.setPreferredSize(new Dimension(200, 30));
-        minesLeft = new JLabel("Mines Left: " + mines);
-        minesLeft.setPreferredSize(new Dimension(200, 30));
-        JButton restart = new JButton("Restart");
-        restart.setMnemonic(KeyEvent.VK_R);
-        restart.addActionListener(new HandleStart());
-        timer = new javax.swing.Timer(1000, new TimerHandler());
-        JPanel jp = new JPanel();
-        jp.setLayout(new GridLayout(1, 3));
-        jp.setBackground(Color.GREEN);
-        jp.setPreferredSize(new Dimension(700, 30));
-        jp.add(minesLeft);
-        jp.add(restart);
-        jp.add(time);
-        add(jp, BorderLayout.SOUTH);
-        add(minesweeperPanel, BorderLayout.CENTER);
     }
 
     public void stopTimer() {
@@ -129,7 +132,9 @@ public class MinesweeperControlPanel extends JPanel {
 
     private class InstructionHandler implements ActionListener {
         public void actionPerformed(ActionEvent e) {
-            String message = "It's just like normal Minesweeper\nRight-Click to mark bombs\nChoose level or difficulty or choose your own!";
+            String message = "It's just like normal Minesweeper\n" +
+                    "Right-Click to mark bombs\n" +
+                    "Choose level or difficulty or choose your own!";
             JOptionPane.showMessageDialog(null, message, "Instructions", JOptionPane.INFORMATION_MESSAGE);
         }
     }
