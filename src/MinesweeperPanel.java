@@ -13,6 +13,11 @@ public class MinesweeperPanel extends JPanel {
     private int minesLeft = 0, r = 0, c = 0;
     private int numRows, numCols;
 
+    /**
+     * Initializes the board and populates it with tiles randomly filled with bombs
+     *
+     * @param controlPanel Control Panel that monitors the game
+     */
     public MinesweeperPanel(MinesweeperControlPanel controlPanel) {
         this.controlPanel = controlPanel;
         numRows = 10;
@@ -40,6 +45,10 @@ public class MinesweeperPanel extends JPanel {
         addMouseListener(new MouseHandler());
     }
 
+    /**
+     * Default mode restarts the game
+     * Number of rows and columns are both set to 10
+     */
     public void setDefaultMode() {
         controlPanel.stopTimer();
         numRows = 10;
@@ -47,6 +56,12 @@ public class MinesweeperPanel extends JPanel {
         restart();
     }
 
+    /**
+     * Default mode restarts the game
+     * Number of rows and columns depends on user input
+     * @param r Number of rows
+     * @param c Number of columns
+     */
     public void setCustomMode(int r, int c) {
         controlPanel.stopTimer();
         numRows = r;
@@ -54,6 +69,10 @@ public class MinesweeperPanel extends JPanel {
         restart();
     }
 
+    /**
+     * Beginner mode restarts the game
+     * Number of rows and columns are both set to 8
+     */
     public void setBeginnerMode() {
         controlPanel.stopTimer();
         numRows = 8;
@@ -61,6 +80,10 @@ public class MinesweeperPanel extends JPanel {
         restart();
     }
 
+    /**
+     * Intermediate Mode restarts the game
+     * Number of Rows and Columns set to 16
+     */
     public void setIntermediateMode() {
         controlPanel.stopTimer();
         numRows = 16;
@@ -68,6 +91,11 @@ public class MinesweeperPanel extends JPanel {
         restart();
     }
 
+    /**
+     * Expert Mode restarts the game
+     * Number of Rows is 16
+     * Number of Columns is 31
+     */
     public void setExpertMode() {
         controlPanel.stopTimer();
         numRows = 16;
@@ -75,6 +103,10 @@ public class MinesweeperPanel extends JPanel {
         restart();
     }
 
+    /**
+     * Clears the game and removes the board
+     * Board is then repopulated with tiles randomly filled with bombs and added into the board
+     */
     public void restart() {
         otherTiles.clear();
         this.removeAll();
@@ -99,39 +131,28 @@ public class MinesweeperPanel extends JPanel {
         findTotalMines();
         controlPanel.setMinesLeft(minesLeft);
     }
-//
-//  public void restart(){
-//    otherTiles.clear();
-//    this.removeAll();
-//    tiles = new MinesweeperTile[10][10];
-//    for(int r = 0; r < tiles.length; r++){
-//      for(int c = 0; c < tiles[r].length; c++){
-//        tiles[r][c] = new MinesweeperTile((Math.random() < 0.2) ? true : false, r, c);
-//        add(tiles[r][c]);
-//      }
-//    }
-//    for(int r = 0; r < tiles.length; r++){
-//      for(int c = 0; c < tiles[r].length; c++){
-//        int n = findNumSurroundingBombs(r,c);
-//        tiles[r][c].setNumberSurroundingBombs(n);
-//      }
-//    }
-//    running = false;
-//    this.updateUI();
-//	findTotalMines();
-//    controlPanel.setMinesLeft(minesLeft);
-//  }
 
+    /**
+     * Displays the board if it is not already seen by the user
+     * Game is not running if board is revealed
+     */
     public void revealBoard() {
         for (MinesweeperTile[] tile : tiles) {
-            for (int c = 0; c < tile.length; c++) {
-                tile[c].isFirstButton(true);
-                tile[c].draw();
+            for (MinesweeperTile aTile : tile) {
+                aTile.isFirstButton(true);
+                aTile.draw();
             }
         }
         running = false;
     }
 
+    /**
+     * For each row and column, it calculates the number of surrounding areas and counts the number
+     * of bombs each of them have
+     * @param r Row to look at
+     * @param c Column to look at
+     * @return Number of bombs surrounding rows have
+     */
     private int findNumSurroundingBombs(int r, int c) {
         int count = 0;
         for (int x = ((r == 0) ? 0 : r - 1); x < ((r == tiles.length - 1) ? tiles.length : r + 2); x++) {
@@ -143,6 +164,9 @@ public class MinesweeperPanel extends JPanel {
         return count;
     }
 
+    /**
+     * Searches through the entire board anc oounts the number of mines left
+     */
     private void findTotalMines() {
         minesLeft = 0;
         for (MinesweeperTile[] msTile : tiles) {
@@ -153,6 +177,12 @@ public class MinesweeperPanel extends JPanel {
         }
     }
 
+    /**
+     * Recursively searches through the board to find spots where there are no mines and
+     * reveals them. It allows the the board to largely expand when there are no nearby bombs
+     * @param r Row to look at
+     * @param c Column to look at
+     */
     private void checkOtherTiles(int r, int c) {
         if (tiles[r][c].hasBomb())
             return;
@@ -190,6 +220,10 @@ public class MinesweeperPanel extends JPanel {
             checkOtherTiles(r + 1, c + 1);
     }
 
+    /**
+     * Checks to see if board has been cleared
+     * Looks to see if any tile still has the bomb or hasn't been flagged
+     */
     private void checkForVictory() {
         for (MinesweeperTile[] tile : tiles) {
             for (MinesweeperTile aTile : tile) {
@@ -204,6 +238,10 @@ public class MinesweeperPanel extends JPanel {
             System.exit(0);
     }
 
+    /**
+     * Draws each of the tiles
+     * @param g Graphics component
+     */
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (running) {
@@ -217,6 +255,11 @@ public class MinesweeperPanel extends JPanel {
         otherTiles.clear();
     }
 
+    /**
+     * Finds the location where each mouse click was pressed down at
+     * Each x and y location has a spot on the board and action is the accordingly
+     * done to the tile
+     */
     private class MouseHandler extends MouseAdapter {
         public void mousePressed(MouseEvent e) {
             if (!running) {

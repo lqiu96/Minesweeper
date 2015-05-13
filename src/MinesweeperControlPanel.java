@@ -37,9 +37,19 @@ public class MinesweeperControlPanel extends JPanel {
         add(minesweeperPanel, BorderLayout.CENTER);
     }
 
+    /**
+     * Create the Menu Bar that gives the users more options for Minesweeper
+     * Two menu options- "Game" and "Options" to choose from
+     * Game allows the user to choose the size of the Minesweeper field from 5 options:
+     * Beginner through Expert- Increasing in difficulty
+     * Default which is what the user first seas
+     * Custom- User chooses what option they want
+     * Options simply displays the Instructions
+     */
     private void initializeMenu() {
         JMenuBar menuBar = new JMenuBar();
         add(menuBar, BorderLayout.NORTH);
+
         JMenu game = new JMenu("Game");
         game.setMnemonic(KeyEvent.VK_G);
         JMenu options = new JMenu("Options");
@@ -75,29 +85,50 @@ public class MinesweeperControlPanel extends JPanel {
         menuBar.add(options);
     }
 
+    /**
+     * Stops the timer from continuing
+     */
     public void stopTimer() {
         timer.stop();
     }
 
+    /**
+     * Displays the hidden tiles and stops the timer
+     */
     public void gameOver() {
         minesweeperPanel.revealBoard();
         timer.stop();
     }
 
+    /**
+     * Displays how many mines are left that user has to find
+     * @param n Number of mines left
+     */
     public void setMinesLeft(int n) {
         if (n >= 0)
             mines = n;
         minesLeft.setText("Mines Left: " + mines);
     }
 
+    /**
+     * Simples starts the timer. Essentially starts the round
+     */
     public void start() {
         timer.start();
     }
 
+    /**
+     * Restarts the timer. Such as when a round has finished and a new one begins
+     */
     public void resetTimer() {
         seconds = 0;
     }
 
+    /**
+     * Sets the board to match the mode that the user selects
+     * Based on from Beginner to Expert, Default and Custom
+     * Maximum Row and Columns user can choose in Custom Mode is 25
+     */
     private class ModeHandler implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             JMenuItem menu = (JMenuItem) e.getSource();
@@ -130,6 +161,9 @@ public class MinesweeperControlPanel extends JPanel {
         }
     }
 
+    /**
+     * Displays the instructions for the User
+     */
     private class InstructionHandler implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             String message = "It's just like normal Minesweeper\n" +
@@ -139,6 +173,9 @@ public class MinesweeperControlPanel extends JPanel {
         }
     }
 
+    /**
+     * Starts the the round by intializing the timer
+     */
     private class HandleStart implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             minesweeperPanel.restart();
@@ -147,6 +184,9 @@ public class MinesweeperControlPanel extends JPanel {
         }
     }
 
+    /**
+     * Displays the time
+     */
     private class TimerHandler implements ActionListener {
         public void actionPerformed(ActionEvent e) {
             seconds++;
